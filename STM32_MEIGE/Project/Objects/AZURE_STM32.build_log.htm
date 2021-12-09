@@ -1,0 +1,58 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.27.1.0
+Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: MI-PC MI-PC, MI-PC, LIC=9N0AE-5FV7T-BXJUY-IQJ7Y-N40UR-AYSXA
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Professional  Version: 5.27.1.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.27.1.0
+Dialog DLL:      DCM.DLL V1.17.2.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.6.0
+Dialog DLL:      TCM.DLL V1.36.1.0
+ 
+<h2>Project:</h2>
+E:\meige\AZURE\STM32_MEIGE\Project\AZURE_STM32.uvprojx
+Project File Date:  12/09/2021
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'meige'
+compiling usb_app.c...
+..\User\app\usb_app.c(357): warning:  #177-D: variable "status"  was declared but never referenced
+      UINT        status = 0;
+..\User\app\usb_app.c(470): warning:  #513-D: a value of type "UX_HOST_CLASS *" cannot be assigned to an entity of type "UX_HOST_CLASS_CDC_ACM *"
+                  app_cdc_acm = Current_class;
+..\User\app\usb_app.c(420): warning:  #177-D: variable "current_device"  was declared but never referenced
+      UX_DEVICE       *current_device;
+..\User\app\usb_app.c: 3 warnings, 0 errors
+linking...
+Program Size: Code=62464 RO-data=1852 RW-data=72996 ZI-data=221636  
+FromELF: creating hex file...
+".\Objects\AZURE_STM32.axf" - 0 Error(s), 3 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.STM32H7xx_DFP.2.8.0.pack
+                Keil.STM32H7xx_DFP.2.8.0
+                STMicroelectronics STM32H7 Series Device Support and Examples
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\_meige
+  C:\Users\MI-PC\AppData\Local\Arm\Packs\Keil\STM32H7xx_DFP\2.8.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include
+
+<h2>Collection of Component Files used:</h2>
+Build Time Elapsed:  00:00:04
+</pre>
+</body>
+</html>
