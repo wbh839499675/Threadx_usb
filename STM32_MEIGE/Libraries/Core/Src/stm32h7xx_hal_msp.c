@@ -63,7 +63,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
 
-    if (huart->Instance==USART3)
+    if (huart->Instance == USART3)
     {
         PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USART3;
         PeriphClkInitStruct.Usart16ClockSelection = RCC_USART16CLKSOURCE_D2PCLK2;
@@ -83,10 +83,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef* huart)
         GPIO_InitStruct.Pin         = STLINK_RX_Pin | STLINK_TX_Pin;
         GPIO_InitStruct.Mode        = GPIO_MODE_AF_PP;
         GPIO_InitStruct.Pull        = GPIO_PULLUP;
-        GPIO_InitStruct.Speed       = GPIO_SPEED_FREQ_VERY_HIGH;
+        GPIO_InitStruct.Speed       = GPIO_SPEED_FREQ_HIGH;
         GPIO_InitStruct.Alternate   = GPIO_AF7_USART3;
         HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
     }
+
+//    /* USART3 interrupt Init */
+//    HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
+//    HAL_NVIC_EnableIRQ(USART3_IRQn);
 }
 
 /*

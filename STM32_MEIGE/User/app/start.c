@@ -96,6 +96,8 @@ extern void Task_KEY(ULONG thread_input);
 static void Task_IDLE(ULONG thread_input);
 static void AppTaskCreate(void);
 extern UINT MX_USBX_Host_Init(VOID *memory_ptr);
+
+extern void userShellInit(void);
 /*
 ********************************************************************************
 *                             LOCAL VARIABLE
@@ -206,7 +208,9 @@ static void Task_Start(ULONG thread_input)
     HAL_ResumeTick();
     bsp_Init();
 
+    userShellInit();
     AppTaskCreate();                /* Create Appliction tasks */
+
 
     //Task_StartHook(&tcb_task_start);
 

@@ -45,7 +45,7 @@ void System_Init(void)
     MPU_Config();
     
     /* Ê¹ÄÜL1 Cache */
-    CPU_CACHE_Enable();
+    //CPU_CACHE_Enable();
 
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();

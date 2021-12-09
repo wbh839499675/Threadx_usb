@@ -33,6 +33,10 @@ void LOG(const int level, const char *fun, const int line, const char *fmt, ...)
     va_end(arg);
     
     if (level >= 0)
-        printf("[%-5s] [%-20s%4d]    %s \r\n",
+    {
+        printf(ANSI_COLOR_BLUE "[%-5s] [%-20s%4d]    %s",
                 log_get_level(level), fun, line, buf);
+
+        printf(ANSI_COLOR_RESET "\r\n");
+    }
 }

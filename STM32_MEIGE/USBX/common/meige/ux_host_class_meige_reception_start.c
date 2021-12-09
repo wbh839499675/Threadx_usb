@@ -28,7 +28,7 @@
 #include "ux_api.h"
 #include "ux_host_class_meige.h"
 #include "ux_host_stack.h"
-
+#include "includes.h"
 
 /**************************************************************************/
 /*                                                                        */
@@ -96,7 +96,7 @@ UINT _ux_host_class_meige_reception_start(UX_HOST_CLASS_MEIGE *meige,
 
         /* If trace is enabled, insert this event into the trace buffer.  */
         //UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_HOST_CLASS_INSTANCE_UNKNOWN, meige, 0, 0, UX_TRACE_ERRORS, 0, 0)
-        printf("%s failed...line = %d, ret = 0x%02x\r\n", __FILE__, __LINE__, status);
+        log_e("failed...status = 0x%02x\r\n",status);
         return(UX_HOST_CLASS_INSTANCE_UNKNOWN);
     }
 
@@ -125,7 +125,10 @@ UINT _ux_host_class_meige_reception_start(UX_HOST_CLASS_MEIGE *meige,
     /* We do not know if the first transfer was successful yet. If the status is not OK, we need to stop the transfer
        in progress flag. */
     if (status != UX_SUCCESS)
+    {
+        log_e("failed...status = 0x%02x\r\n",status);
         meige_reception->ux_host_class_meige_reception_state = UX_HOST_CLASS_MEIGE_RECEPTION_STATE_STOPPED;
+    }
 
     return(status);
 }
