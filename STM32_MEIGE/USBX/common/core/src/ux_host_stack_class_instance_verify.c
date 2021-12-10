@@ -27,6 +27,7 @@
 
 #include "ux_api.h"
 #include "ux_host_stack.h"
+#include "includes.h"
 
 
 /**************************************************************************/ 
@@ -100,12 +101,12 @@ UINT            class_name_length =  0;
     class_inst = _ux_system_host->ux_system_host_class_array;
 
 #if UX_MAX_CLASS_DRIVER > 1
-    printf("%s:  _ux_system_host->ux_system_host_max_class = %d\r\n", __FILE__, _ux_system_host->ux_system_host_max_class);
+    LOG_I("_ux_system_host->ux_system_host_max_class = %d\r\n", _ux_system_host->ux_system_host_max_class);
     /* We need to parse the class table.  */
     for(class_index = 0; class_index < _ux_system_host->ux_system_host_max_class; class_index++)
     {
 #endif
-        printf("%s:  class_inst->ux_host_class_status = 0x%02x...line=%d\r\n", __FILE__, class_inst->ux_host_class_status, __LINE__);
+        LOG_I("class_inst->ux_host_class_status = 0x%02x\r\n", class_inst->ux_host_class_status);
 
         /* Check if this class is already used.  */
         if (class_inst->ux_host_class_status == UX_USED)
@@ -113,7 +114,7 @@ UINT            class_name_length =  0;
             /* Start with the first class instance attached to the class container.  */
             current_class_instance = class_inst->ux_host_class_first_instance;
 
-            /* Traverse the list of the class instances until we find the correct instance.  */        
+            /* Traverse the list of the class instances until we find the correct instance.  */
             while (current_class_instance != UX_NULL)
             {
 
@@ -127,11 +128,17 @@ UINT            class_name_length =  0;
                     if (ux_utility_name_match(class_inst->ux_host_class_name, class_name, class_name_length + 1))
                         return(UX_SUCCESS);
                 #else
+                    LOG_I("class_inst->ux_host_class_name = %s\r\n", class_inst->ux_host_class_name);
+                    LOG_I("class_name = %s\r\n", class_name);
+#if 1
                     status = ux_utility_name_match(class_inst->ux_host_class_name, class_name, class_name_length + 1);
                     if (status != UX_SUCCESS)
-                        printf("%s: falied...line=%d, status=0x%02x\r\n", __FILE__, __LINE__, status);
+                        LOG_E("ux_utility_name_match falied...status=0x%02x\r\n", status);
                     else
                         return (UX_SUCCESS);
+#else
+                    return (UX_SUCCESS);
+#endif
                 #endif
                 }
 

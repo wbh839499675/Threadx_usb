@@ -353,11 +353,11 @@ _NOTIFY
   214 00000078                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M7.fp.dp --apcs=
 interwork --depend=.\objects\tx_initialize_low_level.d -o.\objects\tx_initializ
-e_low_level.o -I.\RTE\_meige -ID:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.8.0\Dri
-vers\CMSIS\Device\ST\STM32H7xx\Include -ID:\Keil_v5\ARM\CMSIS\Include --predefi
-ne="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 525" --predefine="ST
-M32H743xx SETA 1" --list=.\listings\tx_initialize_low_level.lst ..\Threadx\port
-s\cortex_m7\ac5\src\tx_initialize_low_level.s
+e_low_level.o -I.\RTE\_meige -IC:\Users\MI-PC\AppData\Local\Arm\Packs\Keil\STM3
+2H7xx_DFP\2.8.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include -IC:\Keil_v5\ARM\CMSI
+S\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 5
+27" --predefine="STM32H743xx SETA 1" --list=.\listings\tx_initialize_low_level.
+lst ..\Threadx\ports\cortex_m7\ac5\src\tx_initialize_low_level.s
 
 
 

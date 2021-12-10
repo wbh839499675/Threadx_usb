@@ -93,7 +93,7 @@ UINT _ux_host_stack_interface_instance_create(UX_INTERFACE *interface)
     } UX_ENDPOINT_DESCRIPTOR;
 */
 
-    log_i("============Interface Descriptor============\r\nbLength = 0x%02x\r\nbDescriptorType = 0x%02x\r\nbEndpointAddress = 0x%02x\r\nbmAttributes = 0x%02x\r\nwMaxPacketSize = 0x%02x\r\nbInterval = 0x%02x\r\n",
+    LOG_I("============Interface Descriptor============\r\nbLength = 0x%02x\r\nbDescriptorType = 0x%02x\r\nbEndpointAddress = 0x%02x\r\nbmAttributes = 0x%02x\r\nwMaxPacketSize = 0x%02x\r\nbInterval = 0x%02x\r\n",
             endpoint->ux_endpoint_descriptor.bLength,
             endpoint->ux_endpoint_descriptor.bDescriptorType,
             endpoint->ux_endpoint_descriptor.bEndpointAddress,
@@ -110,7 +110,7 @@ UINT _ux_host_stack_interface_instance_create(UX_INTERFACE *interface)
         /* Check status, the controller may have refused the endpoint creation.  */
         if (status != UX_SUCCESS)
         {
-            log_e("_ux_host_stack_endpoint_instance_create failed...ret = 0x%02x\r\n", status);
+            LOG_E("_ux_host_stack_endpoint_instance_create failed...ret = 0x%02x\r\n", status);
             /* An error occurred at the controller level.  */
             return(status);
         }

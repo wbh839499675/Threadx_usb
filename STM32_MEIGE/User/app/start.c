@@ -136,6 +136,12 @@ int main(void)
     //HAL_SuspendTick();
     bsp_Init();
 
+    /* Print HW & SW version information */
+    LOG_I("*********%s***************\r\n", _ux_version_id);
+    LOG_I("Hardware environment:\t\t\t%s\r\n", EVAL_BSP_BOARD_NAME);
+    LOG_I("Software Version:\t\t\t%s\r\n", APP_VERSION);
+    LOG_I("\r\n");
+
     tx_kernel_enter();
 
     while(1);
@@ -159,7 +165,7 @@ void tx_application_define(void *first_unused_memory)
     if (tx_byte_pool_create(&ux_host_app_byte_pool, "Ux App memory pool",
                             ux_host_byte_pool_buffer, UX_HOST_APP_MEM_POOL_SIZE) != TX_SUCCESS)
     {
-        printf("tx_byte_pool_create failed. %d\r\n", __LINE__);
+        LOG_E("tx_byte_pool_create failed.\r\n");
     }
     else
     {
@@ -167,7 +173,7 @@ void tx_application_define(void *first_unused_memory)
 
         if (MX_USBX_Host_Init(memory_ptr) != UX_SUCCESS)
         {
-            printf("MX_USBX_Host_Init failed. %d\r\n", __LINE__);
+            LOG_E("MX_USBX_Host_Init failed.\r\n");
         }
     }
 
@@ -208,7 +214,7 @@ static void Task_Start(ULONG thread_input)
     HAL_ResumeTick();
     bsp_Init();
 
-    userShellInit();
+    //userShellInit();
     AppTaskCreate();                /* Create Appliction tasks */
 
 
@@ -264,6 +270,7 @@ static void AppTaskCreate(void)
                        TX_AUTO_START);
 
     /********************* Create KEY Task *******************/
+#if 0
     tx_thread_create(&tcb_task_key,
                        "The KEY Task",
                        Task_KEY,
@@ -274,7 +281,7 @@ static void AppTaskCreate(void)
                        APP_CFG_TASK_KEY_PRIO,
                        TX_NO_TIME_SLICE,
                        TX_AUTO_START);
-
+#endif
     /********************* Create IDLE Task *******************/
     tx_thread_create(&tcb_task_idle,
                        "The IDLE Task",

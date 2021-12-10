@@ -51,7 +51,6 @@ TX_THREAD                               ux_app_send_thread;
 TX_EVENT_FLAGS_GROUP                    ux_app_event_flag;
 
 UX_HOST_CLASS_MEIGE_RECEPTION           *app_meige_reception;
-//UX_HOST_CLASS_CDC_ACM_RECEPTION           *app_meige_reception;
 
 
 TX_BYTE_POOL                            *ux_app_byte_pool;
@@ -78,7 +77,6 @@ unsigned char                   host_out_buffer[UX_HOST_CLASS_MEIGE_PACKET_SIZE]
 unsigned char                   host_in_buffer[UX_HOST_CLASS_MEIGE_PACKET_SIZE];
 
 UX_HOST_CLASS_MEIGE             *app_cdc_meig;
-UX_HOST_CLASS_CDC_ACM           *app_cdc_acm;
 
 
 TX_QUEUE                        ux_app_message_queue;
@@ -101,7 +99,7 @@ uint8_t receive_data[100];
 extern void USB_Vbus_Init(void);
 VOID ux_host_error_callback(UINT system_level, UINT system_context, UINT error_code);
 
-
+void usb_descriptor(void);
 /*
 ********************************************************************************
 *                                MX_USBX_Host_Init()
@@ -243,32 +241,30 @@ void usbx_app_thread_entry(ULONG arg)
     MX_USB_Host_Init();
 
     /* Start Application */
-    log_i("*********%s***************\r\n", _ux_version_id);
-    log_i("*********Starting CDC Application****************\r\n");
-    log_i("*********Connect your meige Cat.1 Module*********\r\n");
+    //LOG_I("*********Starting CDC Application****************\r\n");
+    LOG_I("*********Connect your meige Cat.1 Module*********\r\n");
 
     while (1)
     {
         if (tx_queue_receive(&ux_app_message_queue, &ux_dev_info, TX_WAIT_FOREVER) != TX_SUCCESS)
-            log_e("tx queue receive failed.\r\n");
+            LOG_E("tx queue receive failed.\r\n");
 
-        log_d("*******************************ux_dev_info.Dev_state = %d\r\n", ux_dev_info.Dev_state);
         if (ux_dev_info.Dev_state == Device_connected)
         {
-            log_d("MEIGE Cat.1 Device found.\r\n");
-            //printf("PID: %#x", (UINT)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.idProduct);
-            //printf("VID: %#x", (UINT)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.idVendor);
+            LOG_D("MEIGE Cat.1 Device found.\r\n");
 
-            //if (app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.bInterfaceClass == 0x0A)
-            if (1)
+            /* Output the detal descriptor of USB */
+            usb_descriptor();
+
+            if (app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.bInterfaceClass == UX_HOST_CLASS_VENDOR_SPECIFIC_CLASS)
             {
                 ux_app_state = App_Ready;
-                log_d("ux app state: App_Ready...............\r\n");
+                LOG_D("ux app state: App_Ready...............\r\n");
             }
             else
             {
                 ux_app_state = App_Idle;
-                log_d("ux app state: App_Idle.................\r\n");
+                LOG_D("ux app state: App_Idle.................\r\n");
             }
         }
         //tx_thread_sleep(MS_TO_TICK(100));
@@ -282,15 +278,15 @@ void usbx_app_recv_thread_entry(ULONG arg)
     ULONG       recv_flag = 0;
 
     static ULONG    allocate_flag = 0;
-    
-    log_i("start.......\r\n");
+
+    //LOG_I("start.......\r\n");
 
     while (1)
     {
         switch (ux_app_state)
         {
             case App_Ready:
-                log_d("ux app recv thread entry....App ready.\r\n");
+                LOG_D("ux app recv thread entry....App ready.\r\n");
 #if 1
                 /* Allocate memory form usb_pool for user reception buffer */
                 if (allocate_flag == 0)
@@ -298,7 +294,7 @@ void usbx_app_recv_thread_entry(ULONG arg)
                     if (tx_byte_allocate(ux_app_byte_pool, (VOID **)&ux_recv_buffer,
                                         APP_RX_DATA_SIZE, TX_NO_WAIT) != TX_SUCCESS)
                     {
-                        printf("tx byte allocate for recv failed.\r\n");
+                        LOG_E("tx byte allocate for recv failed.\r\n");
                     }
                     else
                     {
@@ -318,12 +314,12 @@ void usbx_app_recv_thread_entry(ULONG arg)
                 if (status == UX_SUCCESS)
                 {
                     ux_app_state = App_Start;
-                    log_i("ux host class meige reception start success.\r\n");
+                    LOG_I("ux host class meige reception start success.\r\n");
                 }
                 else
                 {
                     ux_app_state = App_Idle;
-                    log_e("ux host class meige reception start failed...status = 0x%02x\r\n", status);
+                    LOG_E("ux host class meige reception start failed...status = 0x%02x\r\n", status);
                 }
                 
 #else
@@ -332,16 +328,16 @@ void usbx_app_recv_thread_entry(ULONG arg)
             break;
 
             case App_Start:
-                log_i("ux app recv thread entry....App start.\r\n");
+                LOG_I("ux app recv thread entry....App start.\r\n");
                 if (tx_event_flags_get(&ux_app_event_flag, NEW_RECEIVED_DATA, TX_OR_CLEAR,
                                        &recv_flag, TX_WAIT_FOREVER) != TX_SUCCESS)
                 {
-                    log_e("tx event flags get failed.\r\n");
+                    LOG_E("tx event flags get failed.\r\n");
                 }
 
                 do
                 {
-                    log_d("....................recv data.\r\n");
+                    LOG_D("....................recv data.\r\n");
                 } while (0);
             break;
             case App_Idle:
@@ -357,7 +353,7 @@ void usbx_app_send_thread_entry(ULONG arg)
     UINT        status = 0;
     ULONG       send_flag = 0;
 
-    log_i("start.......\r\n");
+    //LOG_I("start.......\r\n");
 
     while (1)
     {
@@ -367,11 +363,11 @@ void usbx_app_send_thread_entry(ULONG arg)
                                 &send_flag,
                                 TX_WAIT_FOREVER) != TX_SUCCESS)
         {
-            log_e("tx event flags get failed.\r\n");
+            LOG_E("tx event flags get failed.\r\n");
         }
         else
         {
-            log_d("please send data here\r\n");
+            LOG_D("please send data here\r\n");
             tx_thread_sleep(MS_TO_TICK(100));
         }
     }
@@ -382,7 +378,7 @@ void ux_meige_reception_callback(struct UX_HOST_CLASS_MEIGE_STRUCT *meige,
                                                                 UCHAR *reception_buffer,
                                                                 ULONG reception_size)
 {
-    log_i("%s\r\n", __func__);
+    LOG_I("%s\r\n", __func__);
 }
 void cdc_acm_reception_callback(struct UX_HOST_CLASS_CDC_ACM_STRUCT  *cdc_acm,
                                             UINT                            status,
@@ -391,7 +387,7 @@ void cdc_acm_reception_callback(struct UX_HOST_CLASS_CDC_ACM_STRUCT  *cdc_acm,
 {
     if (tx_event_flags_set(&ux_app_event_flag, NEW_RECEIVED_DATA, TX_OR) != TX_SUCCESS)
     {
-        log_e("tx event flags set failed\r\n");
+        LOG_E("tx event flags set failed\r\n");
     }
 }
 
@@ -444,6 +440,7 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS *Current_class, VOID *Cur
         break;
 
         case UX_DEVICE_DISCONNECTION:
+            //tx_thread_sleep(MS_TO_TICK(5000));
             ux_dev_info.Dev_state = Device_disconnect;
             tx_queue_send(&ux_app_message_queue, &ux_dev_info, TX_NO_WAIT);
         break;
@@ -451,11 +448,11 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS *Current_class, VOID *Cur
         case UX_DEVICE_INSERTION:
             /* Get MEIGE Class */
             status_host = ux_host_stack_class_get(_ux_system_host_class_meige_name, &host_class);
-            status_cdc = ux_host_stack_class_get(_ux_system_host_class_cdc_acm_name, &cdc_class);
+            //status_cdc = ux_host_stack_class_get(_ux_system_host_class_cdc_acm_name, &cdc_class);
 
             if ((status_host != UX_SUCCESS) && (status_cdc != UX_SUCCESS))
             {
-                log_e("ux_host_stack_class_get failed, status_host = 0x%02x    status_cdc = 0x%02x\r\n",
+                LOG_E("ux_host_stack_class_get failed, status_host = 0x%02x    status_cdc = 0x%02x\r\n",
                         status_host, status_cdc);
                 return UX_ERROR;
             }
@@ -467,8 +464,10 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS *Current_class, VOID *Cur
                 (app_cdc_acm == NULL) */)
             {
                 ux_dev_info.Dev_state = Device_connected;
-                app_cdc_acm = Current_class;
+                app_cdc_meig = Current_instance;
 
+                //LOG_I("app_cdc_meig bInterfaceClass= 0x%02x\r\n",
+                //(uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.bInterfaceClass);
                 /* Check if the Class different from the actual instance */
 #if 0
                 if (app_cdc_acm->ux_host_class_cdc_acm_device->ux_device_state !=
@@ -482,11 +481,11 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS *Current_class, VOID *Cur
                 }
 #endif
                 tx_queue_send(&ux_app_message_queue, &ux_dev_info, TX_NO_WAIT);
-                log_d("UX DEVICE INSERTION!!!!!!!!!!!!!!!!!!!\r\n");
+                LOG_D("UX DEVICE INSERTION!!!!!!!!!!!!!!!!!!!\r\n");
             }
             else
             {
-                log_e("NO Class found...host_class->ux_host_class_name = %s, Current_class->ux_host_class_name\r\n",
+                LOG_E("NO Class found...host_class->ux_host_class_name = %s, Current_class->ux_host_class_name\r\n",
                     host_class->ux_host_class_name, Current_class->ux_host_class_name);
             }
         break;
@@ -497,7 +496,7 @@ UINT ux_host_event_callback(ULONG event, UX_HOST_CLASS *Current_class, VOID *Cur
                 
                 app_cdc_meig = NULL;
             }
-            log_d("UX DEVICE REMOVAL!!!!!!!!!!!!!!!!!!!\r\n");
+            LOG_D("UX DEVICE REMOVAL!!!!!!!!!!!!!!!!!!!\r\n");
             ux_dev_info.Dev_state = Device_disconnect;
             tx_queue_send(&ux_app_message_queue, &ux_dev_info, TX_NO_WAIT);
         break;
@@ -557,4 +556,121 @@ void error_handler(void)
         /* Error - just spin here!  Look at call tree in debugger 
            to see where the error occurred.  */
     }
+}
+
+void usb_descriptor(void)
+{
+ #if 1
+    /* Print Device Descriptor */
+    LOG_I("-----------------------Device Descriptor--------------------------\r\n");
+    LOG_I("bLength\t\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.bLength);
+    LOG_I("bDescriptorType\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.bDescriptorType);
+    LOG_I("bcdUSB\t\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.bcdUSB);
+    LOG_I("bDeviceClass\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.bDeviceClass);
+    LOG_I("bDeviceSubClass\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.bDeviceSubClass);
+    LOG_I("bDeviceProtocol\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.bDeviceProtocol);
+    LOG_I("bMaxPacketSize0\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.bMaxPacketSize0);
+    LOG_I("idVendor\t\t\t:0x%04X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.idVendor);
+    LOG_I("idProduct\t\t\t:0x%04X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.idProduct);
+    LOG_I("bcdDevice\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.bcdDevice);
+    LOG_I("iManufacturer\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.iManufacturer);
+    LOG_I("iProduct\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.iProduct);
+    LOG_I("iSerialNumber\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.iSerialNumber);
+    LOG_I("bNumConfigurations\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_device->ux_device_descriptor.bNumConfigurations);
+    LOG_I("\r\n");
+#endif
+
+#if 1
+    /* Print host Configuration Descriptor */
+    LOG_I("--------------------Configuration Descriptor----------------------\r\n");
+    LOG_I("bLength\t\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_configuration->ux_configuration_descriptor.bLength);
+    LOG_I("bDescriptorType\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_configuration->ux_configuration_descriptor.bDescriptorType);
+    LOG_I("wTotalLength\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_configuration->ux_configuration_descriptor.wTotalLength);
+    LOG_I("bNumInterfaces\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_configuration->ux_configuration_descriptor.bNumInterfaces);
+    LOG_I("bConfigurationValue\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_configuration->ux_configuration_descriptor.bConfigurationValue);
+    LOG_I("iConfiguration\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_configuration->ux_configuration_descriptor.iConfiguration);
+    LOG_I("bmAttributes\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_configuration->ux_configuration_descriptor.bmAttributes);
+    LOG_I("MaxPower\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_configuration->ux_configuration_descriptor.MaxPower);
+    LOG_I("\r\n");
+#endif
+
+#if 1
+    /* Print host Interfce Descriptor */
+    LOG_I("----------------------Interface Descriptor------------------------\r\n");
+    LOG_I("bLength\t\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.bLength);
+    LOG_I("bDescriptiorType\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.bDescriptorType);
+    LOG_I("bInterfaceNumber\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.bInterfaceNumber);
+    LOG_I("bAlternateSetting\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.bAlternateSetting);
+    LOG_I("bNumEndpoints\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.bNumEndpoints);
+    LOG_I("bInterfaceClass\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.bInterfaceClass);
+    LOG_I("bInterfaceSubClass\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.bInterfaceSubClass);
+    LOG_I("bInterfaceProtocol\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.bInterfaceProtocol);
+    LOG_I("iInterface\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_interface->ux_interface_descriptor.iInterface);
+    LOG_I("\r\n");
+#endif
+
+#if 1
+    /* Print Endpoint[IN] Descriptor */
+    LOG_I("--------------------Endpoint[IN] Descriptor-----------------------\r\n");
+    LOG_I("bLength\t\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_in_endpoint->ux_endpoint_descriptor.bLength);
+    LOG_I("bDescriptorType\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_in_endpoint->ux_endpoint_descriptor.bDescriptorType);
+    LOG_I("bEndpointAddress\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_in_endpoint->ux_endpoint_descriptor.bEndpointAddress);
+    LOG_I("bmAttributes\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_in_endpoint->ux_endpoint_descriptor.bmAttributes);
+    LOG_I("wMaxPacketSize\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_in_endpoint->ux_endpoint_descriptor.wMaxPacketSize);
+    LOG_I("bInterval\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_in_endpoint->ux_endpoint_descriptor.bInterval);
+    LOG_I("\r\n");
+
+    /* Print Endpoint[OUT] Descriptor */
+    LOG_I("--------------------Endpoint[OUT] Descriptor-----------------------\r\n");
+    LOG_I("bLength\t\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_out_endpoint->ux_endpoint_descriptor.bLength);
+    LOG_I("bDescriptorType\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_out_endpoint->ux_endpoint_descriptor.bDescriptorType);
+    LOG_I("bEndpointAddress\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_out_endpoint->ux_endpoint_descriptor.bEndpointAddress);
+    LOG_I("bmAttributes\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_out_endpoint->ux_endpoint_descriptor.bmAttributes);
+    LOG_I("wMaxPacketSize\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_out_endpoint->ux_endpoint_descriptor.wMaxPacketSize);
+    LOG_I("bInterval\t\t\t:0x%02X\r\n",
+        (uint8_t)app_cdc_meig->ux_host_class_meige_bulk_out_endpoint->ux_endpoint_descriptor.bInterval);
+    LOG_I("\r\n");
+#endif
 }

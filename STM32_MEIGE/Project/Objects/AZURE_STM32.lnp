@@ -2,8 +2,6 @@
 ".\objects\start.o"
 ".\objects\stm32h7xx_hal_msp.o"
 ".\objects\stm32h7xx_it.o"
-".\objects\log.o"
-".\objects\shell_port.o"
 ".\objects\led_app.o"
 ".\objects\usb_app.o"
 ".\objects\key_app.o"
@@ -468,10 +466,6 @@
 ".\objects\ux_host_stack_transfer_request.o"
 ".\objects\ux_host_stack_transfer_request_abort.o"
 ".\objects\ux_host_stack_uninitialize.o"
-".\objects\shell.o"
-".\objects\shell_cmd_list.o"
-".\objects\shell_companion.o"
-".\objects\shell_ext.o"
 --library_type=microlib --strict --scatter ".\Objects\AZURE_STM32.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

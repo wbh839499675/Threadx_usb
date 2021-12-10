@@ -85,7 +85,7 @@ UINT _ux_host_class_meige_entry(UX_HOST_CLASS_COMMAND *command)
         case UX_HOST_CLASS_COMMAND_QUERY:
             /* The query command is used to let the stack enumeration process know if we want to own
                this device or not.  */
-            log_i("ux_host_class_command_usage = 0x%04x, ux_host_class_command_vid = 0x%08x\r\n",
+            LOG_I("ux_host_class_command_usage = 0x%04x, ux_host_class_command_vid = 0x%08x\r\n",
                     command->ux_host_class_command_usage,
                     command->ux_host_class_command_vid);
             if ((command->ux_host_class_command_usage == UX_HOST_CLASS_COMMAND_USAGE_PIDVID) &&
@@ -95,7 +95,7 @@ UINT _ux_host_class_meige_entry(UX_HOST_CLASS_COMMAND *command)
             }
             else
             {
-                log_e("USBX NO CLASS MATCH\r\n");
+                LOG_E("USBX NO CLASS MATCH\r\n");
                 return (UX_NO_CLASS_MATCH);
             }
 
@@ -118,7 +118,7 @@ UINT _ux_host_class_meige_entry(UX_HOST_CLASS_COMMAND *command)
             /* If trace is enabled, insert this event into the trace buffer.  */
             UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_FUNCTION_NOT_SUPPORTED, 0, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
-            log_e("UX_FUNCTION_NOT_SUPPORTED\r\n");
+            LOG_E("UX_FUNCTION_NOT_SUPPORTED\r\n");
             return (UX_FUNCTION_NOT_SUPPORTED);
     }
 }

@@ -3,7 +3,7 @@
 *
 *
 *
-*                          (c) Copyright 2018-2022; ...
+*                        (c) Copyright 2018-2022; MEIG SMART
 *
 *          All rights reserved.  Protected by international copyright laws.
 *
@@ -18,8 +18,8 @@
 *
 *
 * Filename      : log.h
-* Version       : V1.0.1
-* Programmer(s) : MEIGE
+* Version       : V1.0.0
+* Programmer(s) : MEIG Development Team
 ********************************************************************************
 * Note(s)       : This header file is written for log system.
 *
@@ -101,27 +101,6 @@ typedef enum
     printf("\n")
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-#if 0
-inline void dbg_log_func(const int level, const char *fmt, ...)
-{
-    va_list arg;
-    va_start(arg, fmt);
-    char buf[128] = { 0 };
-    vsnprintf(buf, sizeof(buf), fmt, arg);
-    va_end(arg);
-
-    do
-    {
-        _DBG_LOG_HDR(lvl, color_n);
-        printf("[%-20s%4d]    %s",
-                 __FUNCTION__, __LINE__, buf);
-        _DBG_LOG_X_END;
-    }
-    while (0);
-}
-#endif
-////////////////////////////////////////////////////////////////////////////////
 /*
  * static debug routine
  * NOTE: This is a NOT RECOMMENDED API. Please using LOG_X API.
@@ -181,15 +160,15 @@ inline void dbg_log_func(const int level, const char *fmt, ...)
 
 #if (DBG_VERISION == 1)
 #if (DBG_LEVEL >= DBG_LOG)
-#define log_d(fmt, ...)      dbg_log_line("D", 0, fmt, ##__VA_ARGS__)
+#define LOG_D(fmt, ...)      dbg_log_line("D", 0, fmt, ##__VA_ARGS__)
 #else
-#define log_d(...)
+#define LOG_D(...)
 #endif
 
 #if (DBG_LEVEL >= DBG_INFO)
-#define log_i(fmt, ...)      dbg_log_line("I", 32, fmt, ##__VA_ARGS__)
+#define LOG_I(fmt, ...)      dbg_log_line("I", 32, fmt, ##__VA_ARGS__)
 #else
-#define log_i(...)
+#define LOG_I(...)
 #endif
 
 #if (DBG_LEVEL >= DBG_WARNING)
@@ -199,24 +178,24 @@ inline void dbg_log_func(const int level, const char *fmt, ...)
 #endif
 
 #if (DBG_LEVEL >= DBG_ERROR)
-#define log_e(fmt, ...)      dbg_log_line("E", 31, fmt, ##__VA_ARGS__)
+#define LOG_E(fmt, ...)      dbg_log_line("E", 31, fmt, ##__VA_ARGS__)
 #else
-#define log_e(...)
+#define LOG_E(...)
 #endif
 
 #define LOG_RAW(...)         dbg_raw(__VA_ARGS__)
 
 #elif (DBG_VERISION == 2)
 #if (DBG_LEVEL >= DBG_LOG)
-#define log_d(fmt, ...)      dbg_log_func("D", 0, fmt, ##__VA_ARGS__)
+#define LOG_D(fmt, ...)      dbg_log_func("D", 0, fmt, ##__VA_ARGS__)
 #else
-#define log_d(...)
+#define LOG_D(...)
 #endif
 
 #if (DBG_LEVEL >= DBG_INFO)
-#define log_i(fmt, ...)      dbg_log_func("I", 32, fmt, ##__VA_ARGS__)
+#define LOG_I(fmt, ...)      dbg_log_func("I", 32, fmt, ##__VA_ARGS__)
 #else
-#define log_i(...)
+#define LOG_I(...)
 #endif
 
 #if (DBG_LEVEL >= DBG_WARNING)
@@ -226,34 +205,15 @@ inline void dbg_log_func(const int level, const char *fmt, ...)
 #endif
 
 #if (DBG_LEVEL >= DBG_ERROR)
-#define log_e(fmt, ...)      dbg_log_func("E", 31, fmt, ##__VA_ARGS__)
+#define LOG_E(fmt, ...)      dbg_log_func("E", 31, fmt, ##__VA_ARGS__)
 #else
-#define log_e(...)
+#define LOG_E(...)
 #endif
 
 #define LOG_RAW(...)         dbg_raw(__VA_ARGS__)
 
 #endif
 
-/*
-
-#define log(level, fmt, ...)\
-    LOG(level, __FUNCTION__, __LINE__, fmt, ##__VA_ARGS__)
-
-#define log_d(fmt, ...) \
-    LOG(LOG_DEBUG, __FUNCTION__, __LINE__, fmt, ##__VA_ARGS__)
-
-#define log_i(fmt, ...) \
-    LOG(LOG_INFO, __FUNCTION__, __LINE__, fmt, ##__VA_ARGS__)
-
-#define log_w(fmt, ...) \
-    LOG(LOG_WARN, __FUNCTION__, __LINE__, fmt, ##__VA_ARGS__)
-
-#define log_e(fmt, ...) \
-    LOG(LOG_ERROR, __FUNCTION__, __LINE__, fmt, ##__VA_ARGS__)
-
-*/
-
-void LOG(const int level, const char *fun, const int line, const char *fmt, ...);
 
 #endif
+/**************(c) Copyright 2018-2022; MEIG SMART*****END OF FILE*************/

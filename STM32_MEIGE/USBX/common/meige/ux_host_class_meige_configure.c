@@ -97,7 +97,7 @@ UINT _ux_host_class_meige_configure(UX_HOST_CLASS_MEIGE *meige)
         /* If trace is enabled, insert this event into the trace buffer.  */
         UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONFIGURATION_HANDLE_UNKNOWN, meige->ux_host_class_meige_device, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
-        log_e("failed...status = 0x%02x\r\n",status);
+        LOG_E("failed...status = 0x%02x\r\n",status);
         return(UX_CONFIGURATION_HANDLE_UNKNOWN);
     }
 
@@ -118,7 +118,7 @@ UINT _ux_host_class_meige_configure(UX_HOST_CLASS_MEIGE *meige)
 
             /* If trace is enabled, insert this event into the trace buffer.  */
             UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_CONNECTION_INCOMPATIBLE, meige, 0, 0, UX_TRACE_ERRORS, 0, 0)
-            log_e("failed...status = 0x%02x\r\n",status);
+            LOG_E("failed...status = 0x%02x\r\n",status);
             return(UX_CONNECTION_INCOMPATIBLE);
         }
     }
@@ -128,30 +128,30 @@ UINT _ux_host_class_meige_configure(UX_HOST_CLASS_MEIGE *meige)
     status = _ux_host_stack_device_configuration_select(configuration);
     if (status != UX_SUCCESS)
     {
-        log_e("failed...status = 0x%02x\r\n",status);
+        LOG_E("failed...status = 0x%02x\r\n",status);
         return(status);
     }
 
-    log_i("meige->ux_host_class_meige_device->ux_device_descriptor->bDeviceClass:%02X\r\n",
+    LOG_I("meige->ux_host_class_meige_device->ux_device_descriptor->bDeviceClass:%02X\r\n",
             (UINT)meige->ux_host_class_meige_device->ux_device_descriptor.bDeviceClass);
 
     /* Choose data interface according to class ID */
     if (meige->ux_host_class_meige_device->ux_device_descriptor.bDeviceClass == 0xEF)       //ASR
     {
         meige->ux_host_class_meige_data_interface = 4;
-        log_i("ASR modem, data interface is 4\r\n");
+        LOG_I("ASR modem, data interface is 4\r\n");
     }
 #if 0
     else if (meige->ux_host_class_meige_device->ux_device_descriptor.bDeviceClass == 0x00)  //Qualcomm
     {
         meige->ux_host_class_meige_data_interface = 3;
-        log_i("Qualcomm modem,data interface is 3\r\n");
+        LOG_I("Qualcomm modem,data interface is 3\r\n");
     }
 #endif
     else if (meige->ux_host_class_meige_device->ux_device_descriptor.bDeviceClass == 0x00)  //MEIGE
     {
-        meige->ux_host_class_meige_data_interface = 5;
-        log_i("MEIGE modem, data interface is 5\r\n");
+        meige->ux_host_class_meige_data_interface = 0;
+        LOG_I("MEIGE AT, data interface is 5\r\n");
     }
 
     /* If the operation went well, the meige default alternate setting for the meige interface is

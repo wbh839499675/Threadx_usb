@@ -52,11 +52,14 @@
 /* Define STM32 HCD generic definitions.  */
 
 
-#define UX_HCD_STM32_CONTROLLER                                 6
+//#define UX_HCD_STM32_CONTROLLER                                 6
+//wangbaohe
+#define UX_HCD_STM32_CONTROLLER                                 8
+
 #ifndef UX_HCD_STM32_MAX_NB_CHANNELS
 //#define UX_HCD_STM32_MAX_NB_CHANNELS                            12
 //wangbaohe
-#define UX_HCD_STM32_MAX_NB_CHANNELS                            13
+#define UX_HCD_STM32_MAX_NB_CHANNELS                            24
 #endif /* UX_HCD_STM32_MAX_NB_CHANNELS */
 #define UX_HCD_STM32_NB_ROOT_PORTS                              1
 #define UX_HCD_STM32_NO_CHANNEL_ASSIGNED                        0xff

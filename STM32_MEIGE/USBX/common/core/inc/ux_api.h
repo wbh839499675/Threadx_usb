@@ -21,28 +21,28 @@
 /**************************************************************************/
 
 
-/**************************************************************************/ 
-/*                                                                        */ 
-/*  APPLICATION INTERFACE DEFINITION                       RELEASE        */ 
-/*                                                                        */ 
-/*    ux_api.h                                            PORTABLE C      */ 
+/**************************************************************************/
+/*                                                                        */
+/*  APPLICATION INTERFACE DEFINITION                       RELEASE        */
+/*                                                                        */
+/*    ux_api.h                                            PORTABLE C      */
 /*                                                           6.1.7        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
 /*                                                                        */
 /*  DESCRIPTION                                                           */
-/*                                                                        */ 
-/*    This file defines the basic Application Interface (API) to the      */ 
-/*    high-performance USBX real-time USB stack.  All service prototypes  */ 
-/*    and data structure definitions are defined in this file.            */ 
-/*    Please note that basic data type definitions and other architecture-*/ 
-/*    specific information is contained in the file ux_port.h.            */ 
-/*                                                                        */ 
-/*  RELEASE HISTORY                                                       */ 
-/*                                                                        */ 
-/*    DATE              NAME                      DESCRIPTION             */ 
-/*                                                                        */ 
+/*                                                                        */
+/*    This file defines the basic Application Interface (API) to the      */
+/*    high-performance USBX real-time USB stack.  All service prototypes  */
+/*    and data structure definitions are defined in this file.            */
+/*    Please note that basic data type definitions and other architecture-*/
+/*    specific information is contained in the file ux_port.h.            */
+/*                                                                        */
+/*  RELEASE HISTORY                                                       */
+/*                                                                        */
+/*    DATE              NAME                      DESCRIPTION             */
+/*                                                                        */
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            added query usage of device */
@@ -168,7 +168,7 @@ typedef signed char               SCHAR;
 #ifndef UX_MAX_DEVICE_ENDPOINTS
 //#define UX_MAX_DEVICE_ENDPOINTS                             6
 //wangbaohe
-#define UX_MAX_DEVICE_ENDPOINTS                             16
+#define UX_MAX_DEVICE_ENDPOINTS                             24
 
 #endif
 
@@ -180,7 +180,7 @@ typedef signed char               SCHAR;
 #ifndef UX_MAX_DEVICE_INTERFACES
 //#define UX_MAX_DEVICE_INTERFACES                            6
 //wangbaohe
-#define UX_MAX_DEVICE_INTERFACES                            1
+#define UX_MAX_DEVICE_INTERFACES                            24
 
 #endif
 
@@ -188,8 +188,8 @@ typedef signed char               SCHAR;
 /* Define USBX device max bInterfaceNumber of interfaces (0 ~ n),
    it must be larger than max bInterfaceNumber in USB
    framework descriptors.  */
-#ifndef UX_MAX_SLAVE_INTERFACES  
-#define UX_MAX_SLAVE_INTERFACES                             16
+#ifndef UX_MAX_SLAVE_INTERFACES
+#define UX_MAX_SLAVE_INTERFACES                             24
 #endif
 
 
@@ -197,7 +197,7 @@ typedef signed char               SCHAR;
 #ifndef UX_MAX_DEVICES
 //#define UX_MAX_DEVICES                                      4
 //wangbaohe
-#define UX_MAX_DEVICES                                      1
+#define UX_MAX_DEVICES                                      24
 
 #endif
 

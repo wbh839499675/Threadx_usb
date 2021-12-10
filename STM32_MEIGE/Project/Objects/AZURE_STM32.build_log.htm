@@ -22,16 +22,25 @@ Dialog DLL:      TCM.DLL V1.36.1.0
  
 <h2>Project:</h2>
 E:\meige\AZURE\STM32_MEIGE\Project\AZURE_STM32.uvprojx
-Project File Date:  12/09/2021
+Project File Date:  12/10/2021
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'meige'
-compiling log.c...
+compiling start.c...
+..\User\app\start.c(76): warning:  #177-D: variable "tcb_task_usb"  was declared but never referenced
+  static TX_THREAD        tcb_task_usb;
+..\User\app\start.c(77): warning:  #177-D: variable "stk_task_usb"  was declared but never referenced
+  static uint64_t         stk_task_usb[APP_CFG_TASK_USB_STK_SIZE / 8];
+..\User\app\start.c(82): warning:  #177-D: variable "tcb_task_key"  was declared but never referenced
+  static TX_THREAD        tcb_task_key;
+..\User\app\start.c(83): warning:  #177-D: variable "stk_task_key"  was declared but never referenced
+  static uint64_t         stk_task_key[APP_CFG_TASK_KEY_STK_SIZE / 8];
+..\User\app\start.c: 4 warnings, 0 errors
 linking...
-Program Size: Code=68632 RO-data=3112 RW-data=73084 ZI-data=304460  
+Program Size: Code=65904 RO-data=2316 RW-data=72996 ZI-data=222452  
 FromELF: creating hex file...
-".\Objects\AZURE_STM32.axf" - 0 Error(s), 0 Warning(s).
+".\Objects\AZURE_STM32.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 

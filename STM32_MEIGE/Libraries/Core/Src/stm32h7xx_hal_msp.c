@@ -184,6 +184,12 @@ void HAL_HCD_MspInit(HCD_HandleTypeDef* hcdHandle)
         HAL_NVIC_SetPriority(OTG_FS_IRQn, 6, 0);
         HAL_NVIC_EnableIRQ(OTG_FS_IRQn);
 #else
+        HAL_NVIC_SetPriority(OTG_FS_EP1_OUT_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(OTG_FS_EP1_OUT_IRQn);
+
+        HAL_NVIC_SetPriority(OTG_FS_EP1_IN_IRQn, 0, 0);
+        HAL_NVIC_EnableIRQ(OTG_FS_EP1_IN_IRQn);
+
         HAL_NVIC_SetPriority(OTG_HS_IRQn, 6, 0);
         HAL_NVIC_EnableIRQ(OTG_HS_IRQn);
 #endif

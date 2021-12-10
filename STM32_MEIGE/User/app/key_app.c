@@ -28,6 +28,7 @@
 *                                           LOCAL DEFINES
 *********************************************************************************************************
 */
+TX_EVENT_FLAGS_GROUP                        key_event_flag;
 
 /*
 *********************************************************************************************************
@@ -67,18 +68,30 @@ extern void USB_VbusFS(uint8_t state);
 #if USE_THREADX
 void Task_KEY(ULONG thread_input)
 {
-    static ULONG    status = 1;
+    static      ULONG status = 0;
+    ULONG       recv_flag = 0;
+
     BSP_KEY_Init();
 
-    while (1) 
+    /* Create the event flags group */
+    if (tx_event_flags_create(&key_event_flag, "key event falg") != TX_SUCCESS)
     {
-        if (BSP_KEY_Scan() == 1)
+        LOG_E("tx_event_flags_create failed\r\n");
+        return;
+    }
+
+    LOG_I("start...\r\n");
+    while (1)
+    {
+
+        ULONG sta = tx_event_flags_get(&key_event_flag, 0x01, TX_OR_CLEAR,
+                                               &recv_flag, TX_WAIT_FOREVER);
         {
-            status++;
+            //HardFault here...
+            //USB_VbusFS((status++) % 2);
         }
 
-        USB_VbusFS(status % 2);
-        tx_thread_sleep(MS_TO_TICK(10000));
+        tx_thread_sleep(MS_TO_TICK(1000));
     }
 }
 #endif

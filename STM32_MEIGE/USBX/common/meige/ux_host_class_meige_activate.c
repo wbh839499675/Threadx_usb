@@ -103,14 +103,14 @@ UINT _ux_host_class_meige_activate(UX_HOST_CLASS_COMMAND *command)
     status = _ux_host_stack_class_instance_create(meige->ux_host_class_meige_class, (VOID *)meige);
     if (status != UX_SUCCESS)
     {
-        log_e("_ux_host_stack_class_instance_create failed...ret = 0x%02x\r\n", status);
+        LOG_E("_ux_host_stack_class_instance_create failed...status = 0x%02x\r\n", status);
     }
 
     /* Configure the meige. */
     status = _ux_host_class_meige_configure(meige);
     if (status != UX_SUCCESS)
     {
-        log_e("_ux_host_class_meige_configure failed...ret = 0x%02x\r\n", status);
+        LOG_E("_ux_host_class_meige_configure failed...status = 0x%02x\r\n", status);
     }
     /* Get the meige endpoint(s). We will need to search for Bulk Out and Bulk In endpoints on interface . */
     if (status == UX_SUCCESS)

@@ -56,6 +56,10 @@ extern void SysTick_ISR(void);
 
 #define bsp_ProPer1ms  SysTick_ISR
 
+
+#define EVAL_BSP_BOARD_NAME             "NUCLEO-H743ZI2"
+#define APP_VERSION                     "V1.0.0"
+
 #endif
 
 /********************************************(END OF FILE) ********************************************/

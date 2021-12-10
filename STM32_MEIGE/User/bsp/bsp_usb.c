@@ -19,6 +19,7 @@ extern UX_HOST_CLASS_CDC_ACM           *app_cdc_acm;
 ********************************************************************************
 */
 HCD_HandleTypeDef hhcd_USB_OTG_FS;
+HCD_HandleTypeDef hhcd_USB_OTG_HS;
 
 /*
 ********************************************************************************
@@ -108,17 +109,22 @@ void USB_VbusFS(uint8_t state)
 void MX_USB_OTG_FS_HCD_Init(void)
 {
     hhcd_USB_OTG_FS.Instance = USB_OTG_FS;
+    //hhcd_USB_OTG_FS.Instance = USB_OTG_HS;
+
     hhcd_USB_OTG_FS.Init.Host_channels = 16;
     hhcd_USB_OTG_FS.Init.speed = HCD_SPEED_FULL;
     hhcd_USB_OTG_FS.Init.dma_enable = DISABLE;
+
     hhcd_USB_OTG_FS.Init.phy_itface = HCD_PHY_EMBEDDED;
+    //hhcd_USB_OTG_FS.Init.phy_itface = USB_OTG_EMBEDDED_PHY;
+
     hhcd_USB_OTG_FS.Init.Sof_enable = DISABLE;
     hhcd_USB_OTG_FS.Init.low_power_enable = DISABLE;
     hhcd_USB_OTG_FS.Init.use_external_vbus = DISABLE;
 
     if (HAL_HCD_Init(&hhcd_USB_OTG_FS) != HAL_OK)
     {
-        log_e("HAL_HCD_Init failed.\r\n");
+        LOG_E("HAL_HCD_Init failed.\r\n");
     }
 }
 
@@ -130,7 +136,7 @@ UINT MX_USB_Host_Init(void)
     /* The code below is required for installing the host portion of USBX */
     if (ux_host_stack_initialize(ux_host_event_callback) != UX_SUCCESS)
     {
-        log_e("ux_host_stack_initialize failed.\r\n");
+        LOG_E("ux_host_stack_initialize failed.\r\n");
         return UX_ERROR;
     }
 
@@ -143,7 +149,7 @@ UINT MX_USB_Host_Init(void)
                                         _ux_host_class_cdc_acm_entry) != UX_SUCCESS)
 #endif
     {
-        log_e("ux_host_stack_class_register failed.\r\n");
+        LOG_E("ux_host_stack_class_register failed.\r\n");
         return UX_ERROR;
     }
 
@@ -151,7 +157,7 @@ UINT MX_USB_Host_Init(void)
     MX_USB_OTG_FS_HCD_Init();
 
     /* Register all the USB host controllers available in this system */
-#if 0
+#if 1
     if (ux_host_stack_hcd_register(_ux_system_host_hcd_stm32_name,
                                     ux_hcd_stm32_initialize,
                                     USB_OTG_HS_PERIPH_BASE,
@@ -163,7 +169,7 @@ UINT MX_USB_Host_Init(void)
                                     (ULONG)&hhcd_USB_OTG_FS) != UX_SUCCESS)
 #endif
     {
-        log_e("ux_host_stack_hcd_register failed.\r\n");
+        LOG_E("ux_host_stack_hcd_register failed.\r\n");
         return UX_ERROR;
     }
 

@@ -18,12 +18,18 @@
 
 #include "tx_port.h"
 
-#define KEY_Pin                 GPIO_PIN_13
-#define KEY_GPIO_Port           GPIOC
+#define KEY_PIN                 GPIO_PIN_13
+#define KEY_GPIO_PORT           GPIOC
 
-#define KEY_Read_Value()        HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin)
+#define KEY_EXTI_IRQn           EXTI15_10_IRQn
+#define KEY_EXTI_LINE           EXTI_LINE_13
+
+#define KEY_Read_Value()        HAL_GPIO_ReadPin(KEY_GPIO_PORT, KEY_PIN)
+
+#define KEY_STATUS_PRESS        (0x01)
+
 
 void BSP_KEY_Init(void);
-UINT BSP_KEY_Scan(void);
+
 
 #endif

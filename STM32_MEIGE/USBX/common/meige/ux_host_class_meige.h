@@ -61,15 +61,11 @@
 #define UX_HOST_CLASS_MEIGE_CLASS_TRANSFER_TIMEOUT               10000
 
 #ifndef UX_HOST_CLASS_MEIGE_VENDOR_ID
-
 #define UX_HOST_CLASS_MEIGE_VENDOR_ID                            0x2DEE
-
-/*********************************************************
-
-9001:
-
-*********************************************************/
 #endif
+
+/* Define MEIGE Class Instance class */
+#define UX_HOST_CLASS_VENDOR_SPECIFIC_CLASS                      0xFF
 
 /* Define MEIGE Class packet equivalences. */
 #define UX_HOST_CLASS_MEIGE_PACKET_SIZE                          128
@@ -92,6 +88,7 @@
 
 typedef struct UX_HOST_CLASS_MEIGE_STRUCT
 {
+#if 0
     struct UX_HOST_CLASS_MEIGE_STRUCT *ux_host_class_meige_next_instance;
     UX_HOST_CLASS   *ux_host_class_meige_class;
     UX_DEVICE       *ux_host_class_meige_device;
@@ -104,6 +101,28 @@ typedef struct UX_HOST_CLASS_MEIGE_STRUCT
     struct UX_HOST_CLASS_MEIGE_RECEPTION_STRUCT *ux_host_class_meige_reception;
     ULONG           ux_host_class_meige_notification_count;
     UINT            ux_host_class_meige_data_interface;
+#else
+    struct UX_HOST_CLASS_MEIGE_STRUCT *ux_host_class_meige_next_instance;
+
+    UX_HOST_CLASS   *ux_host_class_meige_class;
+    UX_DEVICE       *ux_host_class_meige_device;
+    UX_ENDPOINT     *ux_host_class_meige_bulk_out_endpoint;
+    UX_ENDPOINT     *ux_host_class_meige_bulk_in_endpoint;
+    UX_INTERFACE    *ux_host_class_meige_interface;
+    UINT            ux_host_class_meige_instance_status;
+    UINT            ux_host_class_meige_state;
+    UX_SEMAPHORE    ux_host_class_meige_semaphore;
+    ULONG           ux_host_calss_meige_notification_count;
+    UCHAR           ux_host_calss_meige_capabilities;
+    ULONG           ux_host_class_meige_device_state;
+
+    struct UX_HOST_CLASS_MEIGE_RECEPTION_STRUCT *ux_host_class_meige_reception;
+
+    VOID  (*ux_host_class_meige_device_status_change_callback)
+                    (struct UX_HOST_CLASS_MEIGE_STRUCT *meigem,
+                    ULONG notification_type, ULONG notification_value);
+    UINT            ux_host_class_meige_data_interface;
+#endif
 } UX_HOST_CLASS_MEIGE;
 
 /* Define MEIGE reception structure. */

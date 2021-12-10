@@ -171,11 +171,11 @@ _NOTIFY
    94 00000004                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M7.fp.dp --apcs=
 interwork --depend=.\objects\tx_thread_context_restore.d -o.\objects\tx_thread_
-context_restore.o -I.\RTE\_meige -ID:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.8.0
-\Drivers\CMSIS\Device\ST\STM32H7xx\Include -ID:\Keil_v5\ARM\CMSIS\Include --pre
-define="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 525" --predefine
-="STM32H743xx SETA 1" --list=.\listings\tx_thread_context_restore.lst ..\Thread
-x\ports\cortex_m7\ac5\src\tx_thread_context_restore.s
+context_restore.o -I.\RTE\_meige -IC:\Users\MI-PC\AppData\Local\Arm\Packs\Keil\
+STM32H7xx_DFP\2.8.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include -IC:\Keil_v5\ARM\
+CMSIS\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SE
+TA 527" --predefine="STM32H743xx SETA 1" --list=.\listings\tx_thread_context_re
+store.lst ..\Threadx\ports\cortex_m7\ac5\src\tx_thread_context_restore.s
 
 
 

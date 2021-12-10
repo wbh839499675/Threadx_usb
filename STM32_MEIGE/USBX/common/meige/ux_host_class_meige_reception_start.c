@@ -82,12 +82,12 @@ UINT _ux_host_class_meige_reception_start(UX_HOST_CLASS_MEIGE *meige,
     UINT        status;
 
     /* If trace is enabled, insert this event into the trace buffer. */
-    //UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_CLASS_MEIGE_RECEPTION_START, meige, 0, 0, 0, UX_TRACE_HOST_CLASS_EVENTS, 0, 0)
+    UX_TRACE_IN_LINE_INSERT(UX_TRACE_HOST_CLASS_MEIGE_RECEPTION_START, meige, 0, 0, 0, UX_TRACE_HOST_CLASS_EVENTS, 0, 0)
 
     /* Ensure the instance is valid. */
     //if (_ux_host_stack_class_instance_verify(_ux_system_host_class_meige_name, (VOID *)meige) != UX_SUCCESS)
-    //status = _ux_host_stack_class_instance_verify(_ux_system_host_class_meige_name, (VOID *)meige);
-    status = UX_SUCCESS;
+    status = _ux_host_stack_class_instance_verify(_ux_system_host_class_meige_name, (VOID *)meige);
+    //status = UX_SUCCESS;
 
     if (status != UX_SUCCESS)
     {
@@ -96,7 +96,7 @@ UINT _ux_host_class_meige_reception_start(UX_HOST_CLASS_MEIGE *meige,
 
         /* If trace is enabled, insert this event into the trace buffer.  */
         //UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_HOST_CLASS_INSTANCE_UNKNOWN, meige, 0, 0, UX_TRACE_ERRORS, 0, 0)
-        log_e("failed...status = 0x%02x\r\n",status);
+        LOG_E("_ux_host_stack_class_instance_verify failed...status = 0x%02x\r\n",status);
         return(UX_HOST_CLASS_INSTANCE_UNKNOWN);
     }
 
@@ -126,7 +126,7 @@ UINT _ux_host_class_meige_reception_start(UX_HOST_CLASS_MEIGE *meige,
        in progress flag. */
     if (status != UX_SUCCESS)
     {
-        log_e("failed...status = 0x%02x\r\n",status);
+        LOG_E("_ux_host_stack_transfer_request failed...status = 0x%02x\r\n",status);
         meige_reception->ux_host_class_meige_reception_state = UX_HOST_CLASS_MEIGE_RECEPTION_STATE_STOPPED;
     }
 

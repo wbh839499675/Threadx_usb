@@ -277,11 +277,11 @@ ARM Macro Assembler    Page 5
   136 00000040                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M7.fp.dp --apcs=
 interwork --depend=.\objects\tx_thread_stack_build.d -o.\objects\tx_thread_stac
-k_build.o -I.\RTE\_meige -ID:\Keil_v5\ARM\PACK\Keil\STM32H7xx_DFP\2.8.0\Drivers
-\CMSIS\Device\ST\STM32H7xx\Include -ID:\Keil_v5\ARM\CMSIS\Include --predefine="
-__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 525" --predefine="STM32H
-743xx SETA 1" --list=.\listings\tx_thread_stack_build.lst ..\Threadx\ports\cort
-ex_m7\ac5\src\tx_thread_stack_build.s
+k_build.o -I.\RTE\_meige -IC:\Users\MI-PC\AppData\Local\Arm\Packs\Keil\STM32H7x
+x_DFP\2.8.0\Drivers\CMSIS\Device\ST\STM32H7xx\Include -IC:\Keil_v5\ARM\CMSIS\In
+clude --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 527" 
+--predefine="STM32H743xx SETA 1" --list=.\listings\tx_thread_stack_build.lst ..
+\Threadx\ports\cortex_m7\ac5\src\tx_thread_stack_build.s
 
 
 

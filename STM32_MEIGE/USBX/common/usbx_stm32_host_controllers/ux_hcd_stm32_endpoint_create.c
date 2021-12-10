@@ -123,7 +123,7 @@ UINT                    endpoint_type;
     ed =  _ux_hcd_stm32_ed_obtain(hcd_stm32);
     if (ed == UX_NULL)
     {
-         log_e("NO ED AVAILABLEr\n");
+         LOG_E("NO ED AVAILABLEr\n");
         return(UX_NO_ED_AVAILABLE);
     }
 
@@ -147,14 +147,14 @@ UINT                    endpoint_type;
         }
     }
 
-    log_d("ed->ux_stm32_ed_channel = %d\r\n",ed->ux_stm32_ed_channel);
+    //LOG_D("ed->ux_stm32_ed_channel = %d\r\n",ed->ux_stm32_ed_channel);
     /* Check for channel assignment.  */
     if (ed->ux_stm32_ed_channel == UX_HCD_STM32_NO_CHANNEL_ASSIGNED)
     {
 
         /* Free the ED.  */
         ed -> ux_stm32_ed_status = UX_HCD_STM32_ED_STATUS_FREE;
-        log_e("NO ED AVAILABLE\r\n");
+        LOG_E("NO ED AVAILABLE\r\n");
         /* Could not allocate a channel.  */
         return(UX_NO_ED_AVAILABLE);
     }
@@ -215,7 +215,7 @@ UINT                    endpoint_type;
        of any transfer in the transfer request.  */
     endpoint->ux_endpoint_transfer_request.ux_transfer_request_maximum_length = UX_HCD_STM32_MAX_PACKET_COUNT *
                                                                                    endpoint -> ux_endpoint_descriptor.wMaxPacketSize;
-    //printf("..............%s success\r\n", __func__);
+
     /* Return successful completion.  */
     return(UX_SUCCESS);
 }
